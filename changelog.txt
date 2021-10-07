@@ -1,0 +1,36 @@
+Trax 1.0
+	Play command added
+	Queue command added
+	NowPlaying command Added
+	Remove command Added
+	Repeat command Added
+	ForceSkip command Added
+	Stop command Added
+	Pause command Added
+	Resume command Added
+	Mention prefix added
+	PlayFirst command added
+	PlaySkip command added
+	Help command added
+Trax 1.1
+	Help commands don't need the prefix anymore (before: thelp tplay, now: thelp play)
+		Fixing that, commands that don't use prefix and start with the prefix are no longer supportable (will get fixed if needed)
+	Shuffle command added
+	Alert about changing queue while playlist is being loaded added
+	Checks' code simplified
+	Menu functions support added
+	Search command Added
+	Seek command Added
+	Restart command Added
+Trax 1.1.1
+	Fixed search command
+Trax 1.2
+	Added support to embed tracks
+	Removed "o" alias
+	Added "s" alias for "search"
+	Added leave command
+	Ping command added
+	Added support for Genius
+	Lyrics command added
+	Alias "l" moved to "lyrics"
+	Added slash commands
