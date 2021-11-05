@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import botinternals.Client;
 import net.dv8tion.jda.api.entities.Activity;
 
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -15,6 +16,7 @@ public class TrackScheduler extends AudioEventAdapter {
     public final AudioPlayer player;
     public final BlockingQueue<AudioTrack> queue;
     public boolean repeating = false;
+    private final AudioTrack rrTrack = PlayerManager.getInstance().getTrackOf("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
@@ -44,7 +46,8 @@ public class TrackScheduler extends AudioEventAdapter {
     }
     public void nextTrack() {
     	AudioTrack next = this.queue.poll();
-        this.player.startTrack(next, false);
+    	Random rr = new Random();
+        this.player.startTrack(rr.nextInt(200000)==1?rrTrack:next, false);
         Client.jda.getPresence().setActivity(Activity.listening(next==null?"silencio":next.getInfo().title));
     }
 

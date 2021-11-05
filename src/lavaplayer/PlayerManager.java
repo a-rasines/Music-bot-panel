@@ -242,6 +242,36 @@ public class PlayerManager {
         });
         }
     }
+    public AudioTrack getTrackOf(String s) {
+    	AudioTrack end = null;
+    	this.audioPlayerManager.loadItemOrdered(this.getMusicManager(Client.jda.getGuilds().get(0)), s, new AudioLoadResultHandler() {
+    			AudioTrack end1 = end;
+			@Override
+			public void trackLoaded(AudioTrack track) {
+				end1 = track;				
+			}
+
+			@Override
+			public void playlistLoaded(AudioPlaylist playlist) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void noMatches() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void loadFailed(FriendlyException exception) {
+				// TODO Auto-generated method stub
+				
+			}
+    		
+    	});
+    	return end;
+    }
     @SuppressWarnings("unchecked")
 	public void loadAndPlay(TextChannel channel, String trackUrl, boolean end) {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
