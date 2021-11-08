@@ -20,11 +20,9 @@ import javax.swing.JPanel;
 
 import botdata.BotData;
 import botinternals.Client;
-import botinternals.SlashOption;
 import containers.Commands;
 import interfaces.NoParamCommand;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 
 public class ControlPanel extends JFrame {
 

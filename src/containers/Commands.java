@@ -18,11 +18,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import botdata.BotData;
 import botinternals.Client;
 import botinternals.MenuManager;
-import botinternals.SlashOption;
 import interfaces.Command;
 import interfaces.NoParamCommand;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
+import lavaplayer.TrackScheduler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -31,8 +31,10 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class Commands {
 	public static HashMap<String, Command> commandMap = new HashMap<>();
@@ -139,8 +141,8 @@ public class Commands {
 			}
 
 			@Override
-			public SlashOption[] params() {
-				return new SlashOption[]{new SlashOption("term", "Término o link a reproducir", OptionType.STRING, true)};
+			public OptionData[] params() {
+				return new OptionData[]{new OptionData(OptionType.STRING, "term", "Término o link a reproducir", true)};
 			}
 
 			
@@ -251,8 +253,8 @@ public class Commands {
 			}
 
 			@Override
-			public SlashOption[] params() {
-				return new SlashOption[]{new SlashOption("position", "Posición a eliminar", OptionType.NUMBER, true)};
+			public OptionData[] params() {
+				return new OptionData[]{new OptionData(OptionType.INTEGER, "position", "Posición a eliminar", true)};
 			}
 			
 		});
@@ -450,8 +452,8 @@ public class Commands {
 			}
 
 			@Override
-			public SlashOption[] params() {
-				return new SlashOption[]{new SlashOption("term", "Término o link a reproducir", OptionType.STRING, true)};
+			public OptionData[] params() {
+				return new OptionData[]{new OptionData(OptionType.STRING,"term", "Término o link a reproducir", true)};
 			}
 			
 		});
@@ -482,8 +484,8 @@ public class Commands {
 			}
 
 			@Override
-			public SlashOption[] params() {
-				return new SlashOption[]{new SlashOption("term", "Término o link a reproducir", OptionType.STRING, true)};
+			public OptionData[] params() {
+				return new OptionData[]{new OptionData(OptionType.STRING, "term", "Término o link a reproducir", true)};
 			}
 			
 		});
@@ -520,8 +522,8 @@ public class Commands {
 			}
 
 			@Override
-			public SlashOption[] params() {
-				return new SlashOption[]{new SlashOption("command", "Comando con el que ayudar", OptionType.STRING, false)};
+			public OptionData[] params() {
+				return new OptionData[]{new OptionData(OptionType.STRING, "command", "Comando con el que ayudar", false)};
 			}		
 		});
 		commandMap.put("shuffle", new NoParamCommand() {
@@ -650,8 +652,8 @@ public class Commands {
 			}
 
 			@Override
-			public SlashOption[] params() {
-				return new SlashOption[]{new SlashOption("term", "Término a buscar", OptionType.STRING, true)};
+			public OptionData[] params() {
+				return new OptionData[]{new OptionData(OptionType.STRING, "term", "Término a buscar", true)};
 			}			
 		});
 		commandMap.put("seek", new Command() {
@@ -698,8 +700,8 @@ public class Commands {
 			}
 
 			@Override
-			public SlashOption[] params() {
-				return new SlashOption[]{new SlashOption("position", "Posición de la cancion actual a reproducir", OptionType.STRING, true)};
+			public OptionData[] params() {
+				return new OptionData[]{new OptionData(OptionType.STRING, "position", "Posición de la cancion actual a reproducir", true)};
 			}			
 		});
 		commandMap.put("restart", new NoParamCommand() {
@@ -802,13 +804,60 @@ public class Commands {
 				ArrayList<CommandData> cdList = new ArrayList<>();
 				for (String k : commandMap.keySet()) {
 					CommandData temp = new CommandData(k, commandMap.get(k).getHelp());
-					for(SlashOption so: commandMap.get(k).params())
-						temp.addOption(so.type, so.name, so.desc, so.required);
+					temp.addOptions(commandMap.get(k).params());
 					cdList.add(temp);
 				}
 				g.updateCommands().addCommands(cdList).queue();
 				
 				
+			}
+			
+		});
+		commandMap.put("move", new Command() {
+
+			@Override
+			public void execute(Message msg) {
+				String[] params = msg.getContentDisplay().split(" ");
+				if(params.length < 2) {
+					Client.sendErrorMessage(msg.getChannel(), "Se necesita como mínimo la posición inicial");
+				}
+				if(!checks(msg.getGuild(), msg.getMember(), msg.getChannel()))return;
+				if(!isInt(params[1]) || (params.length >2 && !isInt(params[2]))) {
+					Client.sendErrorMessage(msg.getChannel(), "Las posiciones tienen que ser números");
+				}
+				TrackScheduler ts = PlayerManager.getInstance().getMusicManager(msg.getGuild()).scheduler;
+				int oldPos = Integer.parseInt(params[1]);
+				int newPos = params.length > 2? Integer.parseInt(params[2]):ts.queue.size()-1;
+				AudioTrack at = ts.getFromQueue((int) oldPos);
+				ts.removeFromQueue((int) oldPos).insertIntoQueue((int) newPos, at);
+				Client.sendInfoMessage(msg.getChannel(), at.getInfo().title+" movido a la posición "+String.valueOf(newPos), "Se ha movido la canción "+at.getInfo().title+" de la posición "+String.valueOf(oldPos)+" a "+String.valueOf(newPos));
+				
+			}
+
+			@Override
+			public void execute(SlashCommandEvent event) {
+				long oldPos = event.getOption("oldposition").getAsLong();
+				OptionMapping newPosOption = event.getOption("newposition");
+				TrackScheduler ts = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler;
+				long newPos = newPosOption==null?ts.queue.size()-1:newPosOption.getAsLong();
+				AudioTrack at = ts.getFromQueue((int) oldPos);
+				ts.removeFromQueue((int) oldPos).insertIntoQueue((int) newPos, at);
+				event.replyEmbeds(Client.getInfoMessage(at.getInfo().title+" movido a la posición "+String.valueOf(newPos), "Se ha movido la canción "+at.getInfo().title+" de la posición "+String.valueOf(oldPos)+" a "+String.valueOf(newPos))).queue();
+			}
+
+			@Override
+			public String getName() {
+				return "move";
+			}
+
+			@Override
+			public String getHelp() {
+				return "Mueve una canción de la lista de una posición a otra";
+			}
+
+			@Override
+			public OptionData[] params() {
+				return new OptionData[] {new OptionData(OptionType.INTEGER, "oldposition", "Antigua posición en la cola", true), new OptionData(OptionType.INTEGER, "newposition", "Nueva posición en la cola, última por defecto", false)};
 			}
 			
 		});

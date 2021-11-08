@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import botinternals.Client;
 import net.dv8tion.jda.api.entities.Activity;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -22,7 +23,23 @@ public class TrackScheduler extends AudioEventAdapter {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
     }
-
+    public TrackScheduler insertIntoQueue(int pos, AudioTrack track) {
+    	ArrayList<AudioTrack> qTemp = new ArrayList<>(this.queue);
+    	qTemp.add(pos, track);
+    	this.queue.clear();
+    	this.queue.addAll(qTemp);
+    	return this;
+    }
+    public TrackScheduler removeFromQueue(int pos) {
+    	ArrayList<AudioTrack> temp = new ArrayList<>(queue);
+    	temp.remove(pos);
+    	this.queue.clear();
+    	this.queue.addAll(temp);
+    	return this;
+    }
+    public AudioTrack getFromQueue(int pos) {
+    	return new ArrayList<AudioTrack>(queue).get(pos);
+    }
     public int queue(AudioTrack track, boolean end) {
         if (!this.player.startTrack(track, true)) {
         	if (end) {
