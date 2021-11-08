@@ -17,7 +17,6 @@ public class TrackScheduler extends AudioEventAdapter {
     public final AudioPlayer player;
     public final BlockingQueue<AudioTrack> queue;
     public boolean repeating = false;
-    private final AudioTrack rrTrack = PlayerManager.getInstance().getTrackOf("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
@@ -62,9 +61,11 @@ public class TrackScheduler extends AudioEventAdapter {
     	this.queue.remove(this.queue.toArray()[pos-1]);
     }
     public void nextTrack() {
+    	
     	AudioTrack next = this.queue.poll();
-    	Random rr = new Random();
-        this.player.startTrack(rr.nextInt(200000)==1?rrTrack:next, false);
+    	//Random rr = new Random();
+        //this.player.startTrack(rr.nextInt(200000)==1?rrTrack:next, false);
+    	this.player.startTrack(next, false);
         Client.jda.getPresence().setActivity(Activity.listening(next==null?"silencio":next.getInfo().title));
     }
 

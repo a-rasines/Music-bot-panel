@@ -120,7 +120,7 @@ public class Commands {
 		    	   event.reply("Comando mal ejecutado");
 		    	   return;
 		       }
-		       String link = event.getOption("path").getAsString();
+		       String link = event.getOption("term").getAsString();
 
 		       if (!isUrl(link)) {
 		            link = "ytsearch:" + link;
@@ -826,23 +826,23 @@ public class Commands {
 					Client.sendErrorMessage(msg.getChannel(), "Las posiciones tienen que ser números");
 				}
 				TrackScheduler ts = PlayerManager.getInstance().getMusicManager(msg.getGuild()).scheduler;
-				int oldPos = Integer.parseInt(params[1]);
-				int newPos = params.length > 2? Integer.parseInt(params[2]):ts.queue.size()-1;
+				int oldPos = Integer.parseInt(params[1])-1;
+				int newPos = params.length > 2? Integer.parseInt(params[2])-1:ts.queue.size()-1;
 				AudioTrack at = ts.getFromQueue((int) oldPos);
 				ts.removeFromQueue((int) oldPos).insertIntoQueue((int) newPos, at);
-				Client.sendInfoMessage(msg.getChannel(), at.getInfo().title+" movido a la posición "+String.valueOf(newPos), "Se ha movido la canción "+at.getInfo().title+" de la posición "+String.valueOf(oldPos)+" a "+String.valueOf(newPos));
+				Client.sendInfoMessage(msg.getChannel(), at.getInfo().title+" movido a la posición "+String.valueOf(newPos+1), "Se ha movido la canción "+at.getInfo().title+" de la posición "+String.valueOf(oldPos+1)+" a "+String.valueOf(newPos+1));
 				
 			}
 
 			@Override
 			public void execute(SlashCommandEvent event) {
-				long oldPos = event.getOption("oldposition").getAsLong();
+				long oldPos = event.getOption("oldposition").getAsLong()-1;
 				OptionMapping newPosOption = event.getOption("newposition");
 				TrackScheduler ts = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler;
-				long newPos = newPosOption==null?ts.queue.size()-1:newPosOption.getAsLong();
+				long newPos = newPosOption==null?ts.queue.size()-1:newPosOption.getAsLong()-1;
 				AudioTrack at = ts.getFromQueue((int) oldPos);
 				ts.removeFromQueue((int) oldPos).insertIntoQueue((int) newPos, at);
-				event.replyEmbeds(Client.getInfoMessage(at.getInfo().title+" movido a la posición "+String.valueOf(newPos), "Se ha movido la canción "+at.getInfo().title+" de la posición "+String.valueOf(oldPos)+" a "+String.valueOf(newPos))).queue();
+				event.replyEmbeds(Client.getInfoMessage(at.getInfo().title+" movido a la posición "+String.valueOf(newPos+1), "Se ha movido la canción "+at.getInfo().title+" de la posición "+String.valueOf(oldPos+1)+" a "+String.valueOf(newPos+1))).queue();
 			}
 
 			@Override
