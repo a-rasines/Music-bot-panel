@@ -47,7 +47,6 @@ public class Commands {
 					Client.sendErrorMessage(mc, "Ya estoy en otro canal de voz");
 					return;
 				}else if(!m.getVoiceState().inVoiceChannel()) {
-					System.out.println(mc.getName());
 					Client.sendErrorMessage(mc, "Necesito que te conectes a un canal de voz");
 					return;
 				}
@@ -864,7 +863,6 @@ public class Commands {
 		
 	}
 	public static boolean checks(SlashCommandEvent event) {
-		System.out.println(event.getChannel().getName());
 		return checks(event.getGuild(),event.getMember(),event.getChannel());
 	}
 	public static boolean checks(Message msg) {
