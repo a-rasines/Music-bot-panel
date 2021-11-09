@@ -894,16 +894,6 @@ public class Commands {
 		}
 		return fin;
 	}
-	public static String subArray(String a, int pos0, int posf) {
-		return subArray(a.toCharArray(), pos0, posf);
-	}
-	public static String subArray(char[] a, int pos0, int posf) {
-		char[] fin = new char[posf - pos0];
-		for (int i = pos0; i<posf;i++) {
-			fin[i-pos0] = a[i];
-		}
-		return String.valueOf(fin);
-	}
 	public static boolean isUrl(String link) {
 		try {
 			new URL(link);

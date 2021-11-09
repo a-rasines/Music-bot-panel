@@ -2,7 +2,6 @@ package botinternals;
 
 import java.util.List;
 
-import containers.Commands;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu.Builder;
@@ -21,7 +20,7 @@ public class MenuManager {
 	}
 	
 	public void addOption(String name, String value) {
-		menu.addOption(name.length()>25?Commands.subArray(name, 0, 24):name, value);
+		menu.addOption(name.length()>25?name.substring(0, 24):name, value);
 	}
 	
 	public String returnAndDestroy(int pos) {
