@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import botdata.BotData;
 import botinternals.Client;
@@ -33,6 +34,12 @@ public class ControlPanel extends JFrame {
 		Client.generateJDA(token, BotData.prefix[(Arrays.asList(BotData.tokens)).indexOf(token)]);
 		JButton exit = new JButton("Terminar");
 		JButton invitar = new JButton("Invitar");
+		
+		JTextField prefix = new JTextField(BotData.prefix[(Arrays.asList(BotData.tokens)).indexOf(token)], 8);
+		JLabel labelPrefix = new JLabel("Prefijo:");
+		JButton buttonPrefix = new JButton("Update");
+		JPanel panelPrefix = new JPanel(new FlowLayout());
+		
 		JLabel foto = new JLabel(Client.jda.getSelfUser().getName());
 		try {
 			foto = new JLabel(new ImageIcon(ImageIO.read(new URL(Client.jda.getSelfUser().getAvatarUrl()))));
@@ -40,8 +47,9 @@ public class ControlPanel extends JFrame {
 			e.printStackTrace();
 		}
 		setLayout(new GridLayout(1,2));
-		JPanel panelSup = new JPanel(new GridLayout(2,1));
-		panelSup.add(invitar);panelSup.add(exit);
+		JPanel panelSup = new JPanel(new GridLayout(3,1));
+		panelPrefix.add(labelPrefix);panelPrefix.add(prefix);panelPrefix.add(buttonPrefix);
+		panelSup.add(invitar);panelSup.add(exit);panelSup.add(panelPrefix);
 		add(foto);add(panelSup);setVisible(true);
 		setMinimumSize(new Dimension(300,200));setResizable(false);
 		setLocationRelativeTo(null);
@@ -80,6 +88,17 @@ public class ControlPanel extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Client.jda.shutdown();
 				System.exit(0);
+				
+			}
+			
+		});
+		buttonPrefix.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(prefix.getText()!="") {
+					Client.prefix = prefix.getText();
+				}
 				
 			}
 			
