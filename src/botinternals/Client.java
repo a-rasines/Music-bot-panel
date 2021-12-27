@@ -7,6 +7,7 @@ import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 
 import botdata.BotData;
+import botdata.ClientData;
 import containers.Aliases;
 import containers.Commands;
 import core.GLA;
@@ -24,30 +25,24 @@ public class Client {
 	public static GLA genius;
 	public static SpotifyApi spotify;
 	public static String prefix;
-	public static void generateJDA(String token, String prefix){
-		Client.prefix = prefix;
-		try {
-			 jda = JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES)
-			            .addEventListeners(new EventHandler()).enableCache(Arrays.asList(CacheFlag.VOICE_STATE)).disableCache(CacheFlag.ACTIVITY, CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
-			            .build();
-			 spotify = SpotifyApi.builder().setClientSecret(BotData.spotifySecret).setClientId(BotData.spotifyId).build();
-		        Thread authTread = new Thread() {
-		        	public void run() {
-		        		while (true){
-		        			try {
-		        				ClientCredentials ccr = spotify.clientCredentials().build().execute();
-		        				spotify.setAccessToken(ccr.getAccessToken());
-		        				Thread.sleep(35999970);
-		        			} catch (Exception e1) {
-		        				e1.printStackTrace();
-		        			}
-		        		}
-		        	}
-		        };
-		        authTread.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static void generateJDA(ClientData data){
+		Client.prefix = data.prefix;
+		 spotify = SpotifyApi.builder().setClientSecret(BotData.spotifySecret).setClientId(BotData.spotifyId).build();
+        Thread authTread = new Thread() {
+        	public void run() {
+        		while (true){
+        			try {
+        				ClientCredentials ccr = spotify.clientCredentials().build().execute();
+        				spotify.setAccessToken(ccr.getAccessToken());
+        				Thread.sleep(35999970);
+        			} catch (Exception e1) {
+        				e1.printStackTrace();
+        			}
+        		}
+        	}
+        };
+        authTread.start();
+        jda = data.generate();
 		genius = new GLA(BotData.geniusId, BotData.geniusSecret);
 		Commands.loadCommands();
 		Aliases.loadAliases();

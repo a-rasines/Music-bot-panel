@@ -16,13 +16,14 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 import botdata.BotData;
+import botdata.ClientData;
 
 public class StartPanel extends JFrame {
 
 	private static final long serialVersionUID = 474679858576248181L;
 	boolean control = false;
 	public StartPanel() {
-		JComboBox<String> comboBots = new JComboBox<String>(BotData.names);
+		JComboBox<ClientData> comboBots = new JComboBox<ClientData>(BotData.defaultBots);
 		JButton boton = new JButton("Iniciar");
 		JButton invite = new JButton("Invitar");
 		setLayout(new FlowLayout());
@@ -35,7 +36,7 @@ public class StartPanel extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				control = true;
 				dispose();
-				new ControlPanel(BotData.tokens[comboBots.getSelectedIndex()]);
+				new ControlPanel((ClientData) comboBots.getSelectedItem());
 				
 			}
 			
@@ -44,13 +45,7 @@ public class StartPanel extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Desktop.getDesktop().browse(new URI("https://discord.com/api/oauth2/authorize?client_id="+BotData.ids[comboBots.getSelectedIndex()]+"&permissions=3230720&scope=bot%20applications.commands"));
-				} catch (IOException | URISyntaxException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
+				((ClientData) comboBots.getSelectedItem()).invite();			
 			}
 			
 		});

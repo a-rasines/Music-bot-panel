@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import botdata.BotData;
+import botdata.ClientData;
 import botinternals.Client;
 import containers.Commands;
 import interfaces.NoParamCommand;
@@ -29,13 +30,11 @@ public class ControlPanel extends JFrame {
 
 	private static final long serialVersionUID = 6622340982815215274L;
 	
-	public ControlPanel(String token) {
-		Long id = BotData.ids[(Arrays.asList(BotData.tokens)).indexOf(token)];
-		Client.generateJDA(token, BotData.prefix[(Arrays.asList(BotData.tokens)).indexOf(token)]);
+	public ControlPanel(ClientData data) {
+		Client.generateJDA(data);
 		JButton exit = new JButton("Terminar");
 		JButton invitar = new JButton("Invitar");
-		
-		JTextField prefix = new JTextField(BotData.prefix[(Arrays.asList(BotData.tokens)).indexOf(token)], 8);
+		JTextField prefix = new JTextField(data.prefix, 8);
 		JLabel labelPrefix = new JLabel("Prefijo:");
 		JButton buttonPrefix = new JButton("Update");
 		JPanel panelPrefix = new JPanel(new FlowLayout());
@@ -73,12 +72,7 @@ public class ControlPanel extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					Desktop.getDesktop().browse(new URI("https://discord.com/api/oauth2/authorize?client_id="+id.toString()+"&permissions=3230720&scope=bot%20applications.commands"));
-				} catch (IOException | URISyntaxException e1) {
-					e1.printStackTrace();
-				}
-				
+				data.invite();
 			}
 			
 		});
@@ -98,6 +92,7 @@ public class ControlPanel extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(prefix.getText()!="") {
 					Client.prefix = prefix.getText();
+					data.prefix = prefix.getText();
 				}
 				
 			}
