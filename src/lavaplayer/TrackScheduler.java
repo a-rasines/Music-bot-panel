@@ -9,7 +9,6 @@ import botinternals.Client;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 

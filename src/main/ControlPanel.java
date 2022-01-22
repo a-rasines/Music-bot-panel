@@ -6,11 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Arrays;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import botdata.BotData;
 import botdata.ClientData;
 import botinternals.Client;
 import containers.Commands;
@@ -108,6 +103,7 @@ public class ControlPanel extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				Client.jda.shutdown();
+				StartPanel.saveBots();
 				System.exit(0);
 				
 			}

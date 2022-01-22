@@ -1,8 +1,6 @@
 package botinternals;
 
 import java.awt.Color;
-import java.util.Arrays;
-
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 
@@ -13,12 +11,9 @@ import containers.Commands;
 import core.GLA;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class Client {
 	public static JDA jda;

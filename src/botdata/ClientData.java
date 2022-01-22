@@ -2,6 +2,7 @@ package botdata;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-public class ClientData {
+public class ClientData implements Serializable {
+	private static final long serialVersionUID = 4507709880375676529L;
 	public static ArrayList<ClientData> extraBots = new ArrayList<>();
 	public String prefix;
 	private String token;
@@ -41,5 +43,14 @@ public class ClientData {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public boolean equalTo(String other) {
+		return token.equals(other);
+	}
+	public String toString() {
+		return name;
+	}
+	public boolean equals(Object o) {
+		return ((o instanceof ClientData) && ((ClientData)o).equalTo(token));
 	}
 }
