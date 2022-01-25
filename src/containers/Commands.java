@@ -70,6 +70,9 @@ public class Commands {
 			public void execute(Guild g, MessageChannel mc, Member m) {
 				if(!checks(g,m,mc))return;
 				g.getAudioManager().closeAudioConnection();
+				TrackScheduler ts= PlayerManager.getInstance().getMusicManager(g).scheduler;
+				ts.queue.clear();
+				ts.nextTrack();
 				
 			}
 			

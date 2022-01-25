@@ -7,10 +7,14 @@ import javax.annotation.Nonnull;
 
 import containers.Aliases;
 import containers.Commands;
+import lavaplayer.PlayerManager;
+import lavaplayer.TrackScheduler;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventHandler extends ListenerAdapter {
@@ -27,7 +31,11 @@ public class EventHandler extends ListenerAdapter {
 			if(Commands.commandMap.containsKey(command)) {
 				Thread startThread = new Thread() {
 					public void run() {
+						try {
 						Commands.commandMap.get(command).execute(mre.getMessage());
+						}catch(InsufficientPermissionException e) {
+							Client.sendErrorMessage(mre.getChannel(), "Imposible ejecutar el comando sin el permiso "+e.getPermission().toString());
+						}
 					}
 				};
 				startThread.start();
@@ -58,6 +66,16 @@ public class EventHandler extends ListenerAdapter {
 			}
 		};
 		th.start();
+	}
+	@Override
+	public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
+		if(event.getMember().getIdLong() == Client.jda.getSelfUser().getIdLong()) {
+			TrackScheduler ts = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler;
+			ts.queue.clear();
+			ts.nextTrack();
+		}else if(event.getGuild().getAudioManager().getConnectedChannel() != null && event.getChannelLeft().getIdLong() == event.getGuild().getAudioManager().getConnectedChannel().getIdLong() && event.getChannelLeft().getMembers().size() == 1) {
+			event.getGuild().getAudioManager().closeAudioConnection();
+		}
 	}
 	public boolean contains(List<User> l, User u) {
 		for (User i: l)

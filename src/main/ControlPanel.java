@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -20,6 +21,7 @@ import botinternals.Client;
 import containers.Commands;
 import interfaces.NoParamCommand;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 public class ControlPanel extends JFrame {
 
@@ -58,8 +60,12 @@ public class ControlPanel extends JFrame {
 					}
 				}
 				for (Guild g : Client.jda.getGuilds())
+					try {
 					if (g.retrieveCommands().complete().size() != Commands.commandMap.size())
 						((NoParamCommand)Commands.commandMap.get("refreshcommands")).execute(g,null,null);
+					}catch(ErrorResponseException e) {
+						JOptionPane.showMessageDialog(null, "En uno o mas servidores no se ha autorizado los comandos de barra lateral");
+					}
 			}
 		};
 		slashLoad.start();
