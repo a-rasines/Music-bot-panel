@@ -38,6 +38,7 @@ public class Client {
         };
         authTread.start();
         jda = data.generate();
+        if(jda == null)return;
 		genius = new GLA(BotData.geniusId, BotData.geniusSecret);
 		Commands.loadCommands();
 		Aliases.loadAliases();

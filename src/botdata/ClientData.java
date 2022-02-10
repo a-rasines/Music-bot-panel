@@ -8,7 +8,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.security.auth.login.LoginException;
+import javax.swing.JOptionPane;
+
 import botinternals.EventHandler;
+import main.StartPanel;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -39,8 +43,13 @@ public class ClientData implements Serializable {
 			 return JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES)
 			            .addEventListeners(new EventHandler()).enableCache(Arrays.asList(CacheFlag.VOICE_STATE)).disableCache(CacheFlag.ACTIVITY, CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
 			            .build();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (LoginException e) {
+			JOptionPane.showMessageDialog(null, "Ha habido un error iniciando sesión: "+e.getMessage());
+			new StartPanel();
+			return null;
+		}catch(IllegalStateException e) {
+			JOptionPane.showMessageDialog(null, "Error interno, espere y vuelva a intentarlo: "+e.getMessage());
+			new StartPanel();
 			return null;
 		}
 	}

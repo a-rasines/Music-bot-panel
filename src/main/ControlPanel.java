@@ -29,6 +29,7 @@ public class ControlPanel extends JFrame {
 	
 	public ControlPanel(ClientData data) {
 		Client.generateJDA(data);
+		if(Client.jda == null)return;
 		JButton exit = new JButton("Terminar");
 		JButton invitar = new JButton("Invitar");
 		JTextField prefix = new JTextField(data.prefix, 8);

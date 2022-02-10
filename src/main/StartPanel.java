@@ -27,11 +27,12 @@ public class StartPanel extends JFrame {
 
 	private static final long serialVersionUID = 474679858576248181L;
 	boolean control = false;
-	final static String SAVEDIR = "bots.bdata";
+	final static String SAVEDIR = new File("").getAbsolutePath().concat("\\bots.bdata");
 	public static ArrayList<ClientData> bots = new ArrayList<>();
 	int c = 0;
 	JComboBox<ClientData> comboBots;
 	public StartPanel() {
+		bots.clear();
 		c = 0;
 		try {
 			bots.addAll(Arrays.asList(BotData.defaultBots));
@@ -163,6 +164,7 @@ public class StartPanel extends JFrame {
 	}
 	@SuppressWarnings("unchecked")
 	public static ArrayList<ClientData> loadBots() {
+		System.out.println(new File(SAVEDIR).isFile());
 		if(!(new File(SAVEDIR).isFile()))return new ArrayList<ClientData>();
 		try {
 		    ObjectInputStream objectinputstream = new ObjectInputStream(new FileInputStream(SAVEDIR));
