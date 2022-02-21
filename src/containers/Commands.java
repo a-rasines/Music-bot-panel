@@ -464,13 +464,17 @@ public class Commands {
 			@Override
 			public void execute(Message msg) {
 				if (!checks(msg))return;
+				int qlenght = PlayerManager.getInstance().getMusicManager(msg.getGuild()).scheduler.queue.size();
 				commandMap.get("playfirst").execute(msg);
+				while (qlenght == PlayerManager.getInstance().getMusicManager(msg.getGuild()).scheduler.queue.size());
 				commandMap.get("forceskip").execute(msg);
 			}
 			@Override
 			public void execute(SlashCommandEvent event) {
 				if (!checks(event))return;
+				int qlenght = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size();
 				commandMap.get("playfirst").execute(event);
+				while (qlenght == PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size());
 				commandMap.get("forceskip").execute(event);
 				
 			}
