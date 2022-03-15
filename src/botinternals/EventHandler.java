@@ -11,16 +11,17 @@ import lavaplayer.PlayerManager;
 import lavaplayer.TrackScheduler;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventHandler extends ListenerAdapter {
 	public final static HashMap<String, MenuManager> selectionMenu = new HashMap<>();
 	@Override
-	public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent mre) {
+	public void onMessageReceived(@Nonnull MessageReceivedEvent mre) {
+		if(!mre.isFromGuild())return;
 		if(contains(mre.getMessage().getMentionedUsers(),Client.jda.getSelfUser())) {
 			mre.getChannel().sendMessage("Estoy activo y mi prefijo es: "+Client.prefix).queue();
 		}else if (mre.getMessage().getContentDisplay().startsWith(Client.prefix)){
@@ -32,7 +33,7 @@ public class EventHandler extends ListenerAdapter {
 				Thread startThread = new Thread() {
 					public void run() {
 						try {
-						Commands.commandMap.get(command).execute(mre.getMessage());
+						Commands.commandMap.get(command).execute(mre);
 						}catch(InsufficientPermissionException e) {
 							Client.sendErrorMessage(mre.getChannel(), "Imposible ejecutar el comando sin el permiso "+e.getPermission().toString());
 						}
@@ -43,7 +44,7 @@ public class EventHandler extends ListenerAdapter {
 		}
 	}
 	@Override
-	public void onSelectionMenu(SelectionMenuEvent sme) {
+	public void onSelectMenuInteraction(SelectMenuInteractionEvent sme) {
 		if (selectionMenu.containsKey(sme.getComponentId())) {
 			sme.deferEdit().queue();
 			MenuManager mm = selectionMenu.get(sme.getComponentId());
@@ -57,7 +58,7 @@ public class EventHandler extends ListenerAdapter {
 		}
 	}
 	@Override
-	public void onSlashCommand(SlashCommandEvent sce) {
+	public void onSlashCommandInteraction(SlashCommandInteractionEvent sce) {
 		if (!Commands.commandMap.containsKey(sce.getCommandPath()))return;
 		Thread th = new Thread(){
 			@Override

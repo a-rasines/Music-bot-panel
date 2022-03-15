@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.3.0_346</version>
+			<version>5.0.0-alpha.9</version>
 		</dependency>
 		<dependency>
 			<groupId>se.michaelthelin.spotify</groupId>

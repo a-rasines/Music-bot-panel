@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -92,7 +92,7 @@ public class PlayerManager {
     	
     }
     @SuppressWarnings("unchecked")
-	public void loadAndPlay(SlashCommandEvent event, String trackUrl, boolean end) {
+	public void loadAndPlay(SlashCommandInteractionEvent event, String trackUrl, boolean end) {
         final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
         if (trackUrl.startsWith("https://open.spotify.com/playlist")) {
         	event.replyEmbeds(Client.getInfoMessage("Advertencia", "La playlist ha sido recibida, debido al límite de pedidos de Spotify esta función va lenta, por favor, no cambie la queue hasta que salga el mensaje de finalización", "Ritmo actual de añadido: 32 canciones por segundo max."));
