@@ -21,12 +21,26 @@ public class InfoCommand implements NoParamCommand{
 	}
 
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m) {
+	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
+		if(!slash)
 		Client.sendInfoMessage(mc, Client.jda.getSelfUser().getName(), 
 				 "Servers incorporados: "+String.valueOf(Client.jda.getGuilds().size())+"\n"
 				+"Comandos activos: "+String.valueOf(Commands.commandMap.size())+"\n"
 				+"Versión activa: "+BotData.version+"\n");
 		
+	}
+
+	@Override
+	public Reply reply(Guild g, MessageChannel mc, Member m) {
+		return new Reply(Client.getInfoMessage(Client.jda.getSelfUser().getName(), 
+				 "Servers incorporados: "+String.valueOf(Client.jda.getGuilds().size())+"\n"
+				+"Comandos activos: "+String.valueOf(Commands.commandMap.size())+"\n"
+				+"Versión activa: "+BotData.version+"\n"));
+	}
+
+	@Override
+	public boolean replyFirst() {
+		return true;
 	}
 	
 }

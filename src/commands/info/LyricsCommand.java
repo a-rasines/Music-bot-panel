@@ -11,13 +11,15 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class LyricsCommand implements NoParamCommand{
-
+	AudioTrack track;
+	String lyrics;
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m) {
+	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
 		GuildMusicManager gmm = PlayerManager.getInstance().getMusicManager(g);
-		AudioTrack track = gmm.audioPlayer.getPlayingTrack(); 
-		String lyrics = Client.genius.search(track.getInfo().title).get(0).getText();
-		Client.sendInfoMessage(mc, "Letra de "+track.getInfo().title, lyrics);
+		track = gmm.audioPlayer.getPlayingTrack(); 
+		lyrics = Client.genius.search(track.getInfo().title).get(0).getText();
+		if(!slash)
+			Client.sendInfoMessage(mc, "Letra de "+track.getInfo().title, lyrics);
 	}
 
 	@Override
@@ -28,6 +30,15 @@ public class LyricsCommand implements NoParamCommand{
 	@Override
 	public String getHelp() {
 		return "Manda la letra de la canción sonando";
+	}
+
+	@Override
+	public Reply reply(Guild g, MessageChannel mc, Member m) {
+		return new Reply(Client.getInfoMessage("Letra de "+track.getInfo().title, lyrics));
+	}
+	@Override
+	public boolean replyFirst() {
+		return false;
 	}
 
 }

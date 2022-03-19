@@ -19,6 +19,7 @@ import commands.queue.SearchCommand;
 import commands.queue.ShuffleCommand;
 import commands.queue.SkipPlayCommand;
 import commands.timeline.PauseCommand;
+import commands.timeline.PlayPauseCommands;
 import commands.timeline.RepeatCommand;
 import commands.timeline.RestartCommand;
 import commands.timeline.ResumeCommand;
@@ -39,8 +40,8 @@ public class Commands {
 		commandMap.put("repeat", new RepeatCommand());
 		commandMap.put("forceskip", new ForceSkipCommand());
 		commandMap.put("stop", new StopCommand());
-		commandMap.put("pause", new PauseCommand());
-		commandMap.put("resume", new ResumeCommand());
+		commandMap.put("pause", new PlayPauseCommands(true));
+		commandMap.put("resume", new PlayPauseCommands(false));
 		commandMap.put("playfirst", new PlayFirstCommand());
 		commandMap.put("skipplay", new SkipPlayCommand());
 		commandMap.put("help", new HelpCommand());

@@ -19,7 +19,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class ShuffleCommand implements NoParamCommand{
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m) {
+	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
 		BlockingQueue<AudioTrack> prevQueue = new LinkedBlockingQueue<>(PlayerManager.getInstance().getMusicManager(g).scheduler.queue);
 		BlockingQueue<AudioTrack> postQueue = new LinkedBlockingQueue<>();
 		Random rand = new Random();
@@ -58,6 +58,18 @@ public class ShuffleCommand implements NoParamCommand{
 	@Override
 	public String getHelp() {
 		return "Redistribuye de forma aleatoria la cola";
+	}
+
+
+	@Override
+	public Reply reply(Guild g, MessageChannel mc, Member m) {
+		return null;
+	}
+
+
+	@Override
+	public boolean replyFirst() {
+		return true;
 	}
 	
 }

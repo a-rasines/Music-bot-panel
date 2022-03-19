@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class StopCommand implements NoParamCommand{
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m) {
+	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
 		if (!checks(g,m,(TextChannel) mc))return;
 
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(g);

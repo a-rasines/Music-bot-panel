@@ -13,10 +13,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class ForceSkipCommand implements NoParamCommand{
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m) {
+	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
 		if (!checks(g,m,(TextChannel) mc))return;
 
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(g);
+        GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(g);
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         if (audioPlayer.getPlayingTrack() == null) {
@@ -35,6 +35,16 @@ public class ForceSkipCommand implements NoParamCommand{
 	@Override
 	public String getHelp() {
 		return "Salta la canción que está sonando";
+	}
+
+	@Override
+	public Reply reply(Guild g, MessageChannel mc, Member m) {
+		return null;
+	}
+
+	@Override
+	public boolean replyFirst() {
+		return true;
 	}
 
 }

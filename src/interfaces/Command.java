@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -83,6 +84,22 @@ public interface Command {
 	            return false;
 	        }
 		return true;
+	}
+	public default MessageEmbed checks(Guild g, Member m) {
+		final GuildVoiceState selfVoiceState = g.getSelfMember().getVoiceState();
+        final GuildVoiceState memberVoiceState = m.getVoiceState();
+		 if (!selfVoiceState.inAudioChannel()) {
+	            ;
+	            return Client.getErrorMessage("Necesito estar en un canal de voz para funcionar");
+	        }
+		 if (!memberVoiceState.inAudioChannel()) {
+	            return Client.getErrorMessage("No te encuentras en el mismo canal que yo, conectate a <#"+selfVoiceState.getChannel().getId()+"> para usar el comando");
+	        }
+
+	        if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
+	        	return Client.getErrorMessage("No te encuentras en el mismo canal que yo, conectate a <#"+selfVoiceState.getChannel().getId()+"> para usar el comando");
+	        }
+		return null;
 	}
 
 }
