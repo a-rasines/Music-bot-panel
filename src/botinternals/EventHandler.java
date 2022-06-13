@@ -106,7 +106,6 @@ public class EventHandler extends ListenerAdapter {
 					gmm.audioPlayer.getPlayingTrack().setPosition(pres.getTimestamps().getElapsedTime(ChronoUnit.MILLIS) + (System.currentTimeMillis() - milis0));
 				}
 			});
-			System.out.println(event.getMember().getEffectiveName() +" ha iniciado una cancion con nombre: " + pres.getDetails() + " y autor: " + pres.getState() + " time:");
 		}
 	}
 	public boolean contains(List<User> l, User u) {
