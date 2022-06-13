@@ -12,17 +12,16 @@ import commands.info.PingCommand;
 import commands.info.QueueCommand;
 import commands.queue.ForceSkipCommand;
 import commands.queue.MoveCommand;
+import commands.queue.PartyCommand;
 import commands.queue.PlayCommand;
 import commands.queue.PlayFirstCommand;
 import commands.queue.RemoveCommand;
 import commands.queue.SearchCommand;
 import commands.queue.ShuffleCommand;
 import commands.queue.SkipPlayCommand;
-import commands.timeline.PauseCommand;
 import commands.timeline.PlayPauseCommands;
 import commands.timeline.RepeatCommand;
 import commands.timeline.RestartCommand;
-import commands.timeline.ResumeCommand;
 import commands.timeline.SeekCommand;
 import commands.timeline.StopCommand;
 import interfaces.Command;
@@ -54,6 +53,8 @@ public class Commands {
 		commandMap.put("info", new InfoCommand());
 		commandMap.put("refreshcommands", new RefreshCommand());
 		commandMap.put("move", new MoveCommand());
+		commandMap.put("party", new PartyCommand());
+		commandMap.put("stopparty", new PartyCommand());
 		
 	}	
 }

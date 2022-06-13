@@ -1,6 +1,5 @@
 package commands.info;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -10,9 +9,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import botinternals.Client;
 import interfaces.NoParamCommand;
-import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -26,7 +23,6 @@ public class QueueCommand implements NoParamCommand{
 
         if (queue.isEmpty()) {
             reply = Client.getInfoMessage("Canciones en cola", "Actualmente no hay canciones en cola");
-            return;
         }else {
 	        int trackCount = Math.min(queue.size(), 20);
 	        List<AudioTrack> trackList = new ArrayList<>(queue);

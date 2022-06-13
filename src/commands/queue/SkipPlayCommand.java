@@ -1,17 +1,17 @@
 package commands.queue;
 
 import containers.Commands;
-import interfaces.Command;
+import interfaces.NonPartyCommand;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-public class SkipPlayCommand implements Command{
+public class SkipPlayCommand implements NonPartyCommand{
 
 	@Override
-	public void execute(MessageReceivedEvent e) {
+	public void execute0(MessageReceivedEvent e) {
 		if (!checks(e.getMessage()))return;
 		int qlenght = PlayerManager.getInstance().getMusicManager(e.getGuild()).scheduler.queue.size();
 		Commands.commandMap.get("playfirst").execute(e);
@@ -19,7 +19,7 @@ public class SkipPlayCommand implements Command{
 		Commands.commandMap.get("forceskip").execute(e);
 	}
 	@Override
-	public void execute(SlashCommandInteractionEvent event) {
+	public void execute0(SlashCommandInteractionEvent event) {
 		if (!checks(event))return;
 		int qlenght = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.size();
 		Commands.commandMap.get("playfirst").execute(event);

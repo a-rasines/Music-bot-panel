@@ -63,7 +63,7 @@ public class ControlPanel extends JFrame {
 				for (Guild g : Client.jda.getGuilds())
 					try {
 					if (g.retrieveCommands().complete().size() != Commands.commandMap.size())
-						((NoParamCommand)Commands.commandMap.get("refreshcommands")).execute(g,null,null);
+						((NoParamCommand)Commands.commandMap.get("refreshcommands")).execute(g,null,null, true);
 					}catch(ErrorResponseException e) {
 						JOptionPane.showMessageDialog(null, "En uno o mas servidores no se ha autorizado los comandos de barra lateral");
 					}

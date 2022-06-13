@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import botinternals.Client;
 import botinternals.MenuManager;
-import interfaces.Command;
+import interfaces.NonPartyCommand;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -17,10 +17,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-public class SearchCommand implements Command{
+public class SearchCommand implements NonPartyCommand{
 
 	@Override
-	public void execute(MessageReceivedEvent msg) {
+	public void execute0(MessageReceivedEvent msg) {
 		if (msg.getMessage().getContentDisplay().split(" ").length <= 1) {
         	Client.sendErrorMessage(msg.getChannel(), "Hace falta un link o termino de busqueda para hacer funcionar el bot");
             return;
@@ -53,7 +53,7 @@ public class SearchCommand implements Command{
 		
 	}
 	@Override
-	public void execute(SlashCommandInteractionEvent event) {
+	public void execute0(SlashCommandInteractionEvent event) {
 		if (event.getOption("term")==null || event.getOption("term").getAsString().equals("")) {
         	event.replyEmbeds(Client.getErrorMessage("Hace falta un link o termino de busqueda para hacer funcionar el bot")).queue();;
             return;

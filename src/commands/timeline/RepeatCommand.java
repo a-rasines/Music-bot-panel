@@ -3,7 +3,7 @@ package commands.timeline;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import botinternals.Client;
-import interfaces.NoParamCommand;
+import interfaces.NonPartyNoParamCommand;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
@@ -11,10 +11,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class RepeatCommand implements NoParamCommand{
-	
+public class RepeatCommand implements NonPartyNoParamCommand{
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
+	public void execute0(Guild g, MessageChannel mc, Member m, boolean slash) {
 		if (!checks(g,m,(TextChannel)mc))return;
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(g);
         final AudioTrack track = musicManager.audioPlayer.getPlayingTrack();
@@ -36,13 +35,12 @@ public class RepeatCommand implements NoParamCommand{
 	}
 
 	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
-		// TODO Auto-generated method stub
+	public Reply reply0(Guild g, MessageChannel mc, Member m) {
 		return null;
 	}
 
 	@Override
 	public boolean replyFirst() {
-		return true;
+		return false;
 	}
 }

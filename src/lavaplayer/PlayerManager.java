@@ -389,6 +389,115 @@ public class PlayerManager {
         });
         }
     }
+    @SuppressWarnings("unchecked")
+	public void loadAndPlay(GuildMusicManager musicManager, String trackUrl, boolean end) {
+        if (trackUrl.startsWith("https://open.spotify.com/playlist")) {
+        	String id = trackUrl.split("\\?")[0].replace("https://open.spotify.com/playlist/", "");
+        	Integer offset = 0;
+        	Paging<PlaylistTrack> pl = new Paging.Builder<PlaylistTrack>().build();
+			try {
+				pl = Client.spotify.getPlaylistsItems(id).offset(offset).build().execute();
+			} catch (ParseException | SpotifyWebApiException | IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+        	while (pl.getItems().length == 100) {
+        		try {
+					pl = Client.spotify.getPlaylistsItems(id).offset(offset).build().execute();
+				} catch (ParseException | SpotifyWebApiException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	        	for (PlaylistTrack t: pl.getItems()) {
+			    		String track;
+						try {
+							track = Client.spotify.getTrack(t.getTrack().getId()).build().getJson();
+							ObjectMapper mapper = new ObjectMapper();
+							HashMap<String, Object> jsonMap = mapper.readValue(track, HashMap.class);
+							ArrayList<HashMap<String, Object>> artists = (ArrayList<HashMap<String, Object>>) jsonMap.get("artists");
+							String artistName = (String) (artists.get(0)).get("name");
+							String songName = (String) jsonMap.get("name");
+							trackUrl = "ytsearch:"+songName +" - "+artistName;
+							this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+		
+								@Override
+								public void trackLoaded(AudioTrack track) {
+								musicManager.scheduler.queue(track, end);
+								}
+		
+								@Override
+								public void playlistLoaded(AudioPlaylist playlist) {
+									final AudioTrack track = playlist.getTracks().get(0);
+					                musicManager.scheduler.queue(track, end);
+								}
+		
+								@Override
+								public void noMatches() {
+									System.out.println("no encontrado");
+								}
+		
+								@Override
+								public void loadFailed(FriendlyException exception) {
+									System.out.println("error");
+								}});
+							try {
+								Thread.sleep(62);
+							} catch (InterruptedException e) {
+								System.out.println(t.getTrack().getName());
+								e.printStackTrace();
+							}
+							
+						} catch (ParseException | SpotifyWebApiException | IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		        	}
+	        	offset+=100;
+        	}
+        }else {
+        	if (trackUrl.startsWith("https://open.spotify.com/track")) {
+        		String id = trackUrl.split("\\?")[0].replace("https://open.spotify.com/track/", "");
+        		String track;
+				try {
+					track = Client.spotify.getTrack(id).build().getJson();
+					ObjectMapper mapper = new ObjectMapper();
+					HashMap<String, Object> jsonMap = mapper.readValue(track, HashMap.class);
+					ArrayList<HashMap<String, Object>> artists = (ArrayList<HashMap<String, Object>>) jsonMap.get("artists");
+					String artistName = (String) (artists.get(0)).get("name");
+					String songName = (String) jsonMap.get("name");
+					trackUrl = "ytsearch:"+songName +" - "+artistName;
+					
+					
+				} catch (ParseException | SpotifyWebApiException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+        System.out.println(trackUrl);
+        this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                musicManager.scheduler.queue(track, end);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                final AudioTrack track = playlist.getTracks().get(0);
+                musicManager.scheduler.queue(track, end);
+            }
+
+            @Override
+            public void noMatches() {
+            	System.out.println("Not found");
+            }
+
+            @Override
+            public void loadFailed(FriendlyException exception) {
+            	System.out.println(exception.getMessage());
+            }
+        });
+        }
+    }
 
     public static PlayerManager getInstance() {
         if (INSTANCE == null) {

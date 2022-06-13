@@ -3,7 +3,7 @@ package commands.queue;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 
 import botinternals.Client;
-import interfaces.NoParamCommand;
+import interfaces.NonPartyNoParamCommand;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class ForceSkipCommand implements NoParamCommand{
+public class ForceSkipCommand implements NonPartyNoParamCommand{
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
+	public void execute0(Guild g, MessageChannel mc, Member m, boolean slash) {
 		if (!checks(g,m,(TextChannel) mc))return;
 
         GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(g);
@@ -38,7 +38,7 @@ public class ForceSkipCommand implements NoParamCommand{
 	}
 
 	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
+	public Reply reply0(Guild g, MessageChannel mc, Member m) {
 		return null;
 	}
 

@@ -17,7 +17,6 @@ public class NowPlayingCommand implements NoParamCommand{
 	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
 		if (!checks(g,m,mc))return;
         AudioTrack track = PlayerManager.getInstance().getMusicManager(g).audioPlayer.getPlayingTrack();
-
         if (track == null) {
         	reply= Client.getInfoMessage("Now playing", "No hay nada reproduciondose ahora mismo");
         }else {
@@ -25,7 +24,7 @@ public class NowPlayingCommand implements NoParamCommand{
         	reply = Client.getInfoMessage("Now playing", info.title +" - "+info.author+ " ("+info.uri+")",formatTime(info.length));
         }
         if(!slash)
-        	mc.sendMessageEmbeds(reply);
+        	mc.sendMessageEmbeds(reply).queue();
 	}
 	
 

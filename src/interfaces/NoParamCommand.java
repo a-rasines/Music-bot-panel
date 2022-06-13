@@ -16,12 +16,14 @@ public interface NoParamCommand extends Command {
 		Reply r = reply(event.getGuild(),event.getChannel(),event.getMember());
 		if(!replyFirst())execute(event.getGuild(),event.getChannel(),event.getMember(), true);
 		try {
-		if(r==null)
+		if(r==null && !event.isAcknowledged())
 			event.reply("Comando "+event.getName()+" recibido").queue();
+		else if(r.type == Reply.Type.NULL || r == null) 
+			System.out.println("Null response");
 		else if(r.type == Reply.Type.Embed)
-			event.replyEmbeds((MessageEmbed)r.value);
-		else
-			event.reply((String)r.value);
+			event.replyEmbeds((MessageEmbed)r.value).queue();
+		else if (r != null)
+			event.reply((String)r.value).queue();
 		}catch (Exception e) {}
 		if(replyFirst())execute(event.getGuild(),event.getChannel(),event.getMember(), true);
 	};
@@ -32,7 +34,7 @@ public interface NoParamCommand extends Command {
 		return new OptionData[0];
 	};
 	public static class Reply{
-		public enum Type{Embed, Text};
+		public enum Type{Embed, Text, NULL};
 		public final Type type;
 		public final Object value;
 		public Reply(MessageEmbed e) {

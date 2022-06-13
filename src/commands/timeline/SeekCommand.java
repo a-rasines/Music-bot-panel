@@ -1,7 +1,7 @@
 package commands.timeline;
 
 import botinternals.Client;
-import interfaces.Command;
+import interfaces.NonPartyCommand;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -9,10 +9,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-public class SeekCommand implements Command{
+public class SeekCommand implements NonPartyCommand{
 
 	@Override
-	public void execute(MessageReceivedEvent msg) {
+	public void execute0(MessageReceivedEvent msg) {
 		if (!checks(msg.getMessage()))return;
 		if (msg.getMessage().getContentDisplay().split(" ").length >= 2) {
 			String[] time0 = msg.getMessage().getContentDisplay().split(" ")[1].split(":");
@@ -27,7 +27,7 @@ public class SeekCommand implements Command{
 			Client.sendErrorMessage(msg.getChannel(), "Introduce el punto al que saltar");
 	}
 	@Override
-	public void execute(SlashCommandInteractionEvent event) {
+	public void execute0(SlashCommandInteractionEvent event) {
 		if (!checks(event))return;
 		if (event.getOption("position") != null && isInt(event.getOption("position").getAsString().split(":"))) {
 			String[] time0 = event.getOption("position").getAsString().split(":");

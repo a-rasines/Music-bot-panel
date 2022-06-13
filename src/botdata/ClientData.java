@@ -40,8 +40,8 @@ public class ClientData implements Serializable {
 	}
 	public JDA generate() {
 		try {
-			 return JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES)
-			            .addEventListeners(new EventHandler()).enableCache(Arrays.asList(CacheFlag.VOICE_STATE)).disableCache(CacheFlag.ACTIVITY, CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
+			 return JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES)
+			            .addEventListeners(new EventHandler()).enableCache(Arrays.asList(CacheFlag.VOICE_STATE, CacheFlag.ACTIVITY)).disableCache(CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
 			            .build();
 		} catch (LoginException e) {
 			JOptionPane.showMessageDialog(null, "Ha habido un error iniciando sesión: "+e.getMessage());

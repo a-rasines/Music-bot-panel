@@ -15,7 +15,7 @@ public class PlayCommand implements Command{
 	public void execute(MessageReceivedEvent event) {
 		final Message msg = event.getMessage();
 		final TextChannel channel = msg.getTextChannel();
-
+		
         if (msg.getContentDisplay().split(" ").length == 1) {
         	if (msg.getAttachments().size() == 1 && (msg.getAttachments().get(0).getContentType().equals("audio/mpeg"))||msg.getAttachments().get(0).getContentType().equals("video/mp4"))
         		PlayerManager.getInstance().loadAndPlay(channel, msg.getAttachments().get(0).getUrl(), true);
@@ -35,6 +35,10 @@ public class PlayCommand implements Command{
 	}
 	@Override
 	public void execute(SlashCommandInteractionEvent event) {
+		if(PartyCommand.stalkerMap.containsKey(event.getGuild().getIdLong())) {
+			event.replyEmbeds(Client.getErrorMessage("El modo party esta activado. Usa __stopparty__ para poder usar este comando."));
+			return;
+		}
        if (event.getOption("term") == null || event.getOption("term").getAsString().equals("")) {
         	event.replyEmbeds(Client.getErrorMessage("Hace falta un link o termino de busqueda para hacer funcionar el bot")).queue();
             return;

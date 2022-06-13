@@ -85,12 +85,9 @@ public class StartPanel extends JFrame {
 				Long id = Long.parseLong(id0);
 				String name = JOptionPane.showInputDialog("Nombre con el que guardar el bot");
 				String prefix = JOptionPane.showInputDialog("Prefijo predefinido del bot");
-				System.out.println(bots.size());
 				ClientData nuevo = new ClientData(name, id, token, prefix);
 				bots.add(nuevo);
 				comboBots.addItem(nuevo);
-				
-				System.out.println(bots.size());
 			}
 			
 		});
@@ -164,7 +161,6 @@ public class StartPanel extends JFrame {
 	}
 	@SuppressWarnings("unchecked")
 	public static ArrayList<ClientData> loadBots() {
-		System.out.println(new File(SAVEDIR).isFile());
 		if(!(new File(SAVEDIR).isFile()))return new ArrayList<ClientData>();
 		try {
 		    ObjectInputStream objectinputstream = new ObjectInputStream(new FileInputStream(SAVEDIR));
@@ -180,10 +176,8 @@ public class StartPanel extends JFrame {
 	public static void saveBots() {
 		@SuppressWarnings("unchecked")
 		ArrayList<ClientData> save = (ArrayList<ClientData>) bots.clone();
-		System.out.println(save.size());
 		try {
 			save.removeAll(Arrays.asList(BotData.defaultBots));
-			System.out.println(save.size());
 		}catch(Exception e) {} //Para prevenir fallos por la falta de BotData en el caso el repo de github
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVEDIR));

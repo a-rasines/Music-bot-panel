@@ -27,7 +27,7 @@ public class RefreshCommand implements NoParamCommand{
 	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
 		ArrayList<CommandData> cdList = new ArrayList<>();
 		for (String k : Commands.commandMap.keySet()) {
-			CommandDataImpl temp = new CommandDataImpl(k, Commands.commandMap.get(k).getHelp());
+			CommandDataImpl temp = new CommandDataImpl(k, Commands.commandMap.get(k).getHelp().length() > 100? (Commands.commandMap.get(k).getHelp().substring(0, 97) + "..."):Commands.commandMap.get(k).getHelp());
 			temp.addOptions(Commands.commandMap.get(k).params());
 			cdList.add(temp);
 		}

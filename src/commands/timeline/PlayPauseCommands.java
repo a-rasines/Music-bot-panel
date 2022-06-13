@@ -1,7 +1,7 @@
 package commands.timeline;
 
 import botinternals.Client;
-import interfaces.NoParamCommand;
+import interfaces.NonPartyNoParamCommand;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
@@ -9,13 +9,13 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
-public class PlayPauseCommands implements NoParamCommand{
+public class PlayPauseCommands implements NonPartyNoParamCommand{
 	private boolean newState;
 	public PlayPauseCommands(boolean stopped) {
 		newState = stopped;
 	}
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
+	public void execute0(Guild g, MessageChannel mc, Member m, boolean slash) {
 		if(slash)return;
 		if (!checks(g,m,mc))return;
         
@@ -36,7 +36,7 @@ public class PlayPauseCommands implements NoParamCommand{
 	}
 
 	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
+	public Reply reply0(Guild g, MessageChannel mc, Member m) {
 		MessageEmbed e = checks(g,m);
 		if(e!=null)return new Reply(e);
 		final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(g);
