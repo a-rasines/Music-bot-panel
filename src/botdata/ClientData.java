@@ -30,7 +30,7 @@ public class ClientData implements Serializable {
 	}
 	public void invite() {
 		try {
-			Desktop.getDesktop().browse(new URI("https://discord.com/api/oauth2/authorize?client_id="+String.valueOf(id)+"&permissions=3230720&scope=bot%20applications.commands"));
+			Desktop.getDesktop().browse(new URI("https://discord.com/api/oauth2/authorize?client_id="+String.valueOf(id)+"&permissions=3164160&scope=bot%20applications.commands"));
 		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
 		}
