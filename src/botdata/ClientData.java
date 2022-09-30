@@ -37,7 +37,7 @@ public class ClientData implements Serializable {
 	}
 	public JDA generate() {
 		try {
-			 return JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES)
+			 return JDABuilder.create(token, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_PRESENCES)
 			            .addEventListeners(new EventHandler()).enableCache(Arrays.asList(CacheFlag.VOICE_STATE, CacheFlag.ACTIVITY)).disableCache(CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS)
 			            .build();
 		} catch(IllegalStateException e) {
