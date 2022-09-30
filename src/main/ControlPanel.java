@@ -14,12 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import botdata.ClientData;
 import botinternals.Client;
+import commands.bot.RefreshCommand;
 import containers.Commands;
-import interfaces.NoParamCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
@@ -32,23 +30,24 @@ public class ControlPanel extends JFrame {
 		if(Client.jda == null)return;
 		JButton exit = new JButton("Terminar");
 		JButton invitar = new JButton("Invitar");
-		JTextField prefix = new JTextField(data.prefix, 8);
-		JLabel labelPrefix = new JLabel("Prefijo:");
-		JButton buttonPrefix = new JButton("Update");
-		JPanel panelPrefix = new JPanel(new FlowLayout());
 		
-		JLabel foto = new JLabel(Client.jda.getSelfUser().getName());
-		try {
-			foto = new JLabel(new ImageIcon(ImageIO.read(new URL(Client.jda.getSelfUser().getAvatarUrl()))));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		final JLabel foto = new JLabel(Client.jda.getSelfUser().getName());
+		new Thread() {
+			public void run() {
+				try {
+					foto.setIcon(new ImageIcon(ImageIO.read(new URL(Client.jda.getSelfUser().getEffectiveAvatarUrl()).openStream())));
+					foto.setText("");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			};
+		}.start();
 		setLayout(new GridLayout(1,2));
 		JPanel panelSup = new JPanel(new GridLayout(3,1));
-		panelPrefix.add(labelPrefix);panelPrefix.add(prefix);panelPrefix.add(buttonPrefix);
-		panelSup.add(invitar);panelSup.add(exit);panelSup.add(panelPrefix);
+		panelSup.add(invitar);panelSup.add(exit);
 		add(foto);add(panelSup);setVisible(true);
-		setMinimumSize(new Dimension(300,200));setResizable(false);
+		setMinimumSize(new Dimension(300,150));setResizable(false);
 		setLocationRelativeTo(null);
 		Thread slashLoad = new Thread() {
 			@Override
@@ -63,7 +62,7 @@ public class ControlPanel extends JFrame {
 				for (Guild g : Client.jda.getGuilds())
 					try {
 					if (g.retrieveCommands().complete().size() != Commands.commandMap.size())
-						((NoParamCommand)Commands.commandMap.get("refreshcommands")).execute(g,null,null, true);
+						RefreshCommand.refresh(g);
 					}catch(ErrorResponseException e) {
 						JOptionPane.showMessageDialog(null, "En uno o mas servidores no se ha autorizado los comandos de barra lateral");
 					}
@@ -84,18 +83,6 @@ public class ControlPanel extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Client.jda.shutdown();
 				System.exit(0);
-				
-			}
-			
-		});
-		buttonPrefix.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(prefix.getText()!="") {
-					Client.prefix = prefix.getText();
-					data.prefix = prefix.getText();
-				}
 				
 			}
 			

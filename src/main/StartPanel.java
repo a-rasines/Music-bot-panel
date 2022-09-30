@@ -4,8 +4,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -84,8 +84,7 @@ public class StartPanel extends JFrame {
 				}
 				Long id = Long.parseLong(id0);
 				String name = JOptionPane.showInputDialog("Nombre con el que guardar el bot");
-				String prefix = JOptionPane.showInputDialog("Prefijo predefinido del bot");
-				ClientData nuevo = new ClientData(name, id, token, prefix);
+				ClientData nuevo = new ClientData(name, id, token);
 				bots.add(nuevo);
 				comboBots.addItem(nuevo);
 			}
@@ -101,14 +100,7 @@ public class StartPanel extends JFrame {
 			}
 			
 		});
-		addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
+		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if(!control) {
@@ -116,36 +108,6 @@ public class StartPanel extends JFrame {
 					System.exit(0);
 				}
 				else dispose();
-				
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			

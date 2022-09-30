@@ -4,25 +4,10 @@ import botinternals.Client;
 import interfaces.NonPartyNoParamCommand;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class StopCommand implements NonPartyNoParamCommand{
-	@Override
-	public void execute0(Guild g, MessageChannel mc, Member m, boolean slash) {
-		if (!checks(g,m,(TextChannel) mc))return;
-
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(g);
-
-        musicManager.scheduler.player.stopTrack();
-        musicManager.scheduler.queue.clear();
-        musicManager.scheduler.player.setPaused(false);
-        if(!slash)
-        	Client.sendInfoMessage(mc, "Stop", "El bot se ha detenido y la lista ha sido eliminada");
-		
-	}
+	
 	@Override
 	public String getName() {
 		return "Stop (end)";
@@ -32,12 +17,17 @@ public class StopCommand implements NonPartyNoParamCommand{
 	public String getHelp() {
 		return "Termina la canción y elimina la lista";
 	}
+
 	@Override
-	public Reply reply0(Guild g, MessageChannel mc, Member m) {
-		return new Reply(Client.getInfoMessage("Stop", "El bot se ha detenido y la lista ha sido eliminada"));
-	}
-	@Override
-	public boolean replyFirst() {
-		return false;
+	public void execute0(SlashCommandInteractionEvent event) {
+		if (!checks(event.getGuild(),event.getMember(),event.getMessageChannel()))return;
+
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+
+        musicManager.scheduler.player.stopTrack();
+        musicManager.scheduler.queue.clear();
+        musicManager.scheduler.player.setPaused(false);
+    	Client.sendInfoMessage(event, "Stop", "El bot se ha detenido y la lista ha sido eliminada");
+		
 	}			
 }

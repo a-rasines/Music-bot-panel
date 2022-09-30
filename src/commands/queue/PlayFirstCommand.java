@@ -4,46 +4,12 @@ import botinternals.Client;
 import interfaces.NonPartyCommand;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class PlayFirstCommand implements NonPartyCommand{
 
-
-	@Override
-	public void execute0(MessageReceivedEvent msg) {
-		final TextChannel channel = msg.getTextChannel();
-		
-        if (msg.getMessage().getContentDisplay().split(" ").length <= 1) {
-        	Client.sendErrorMessage(msg.getChannel(), "Hace falta un link o termino de busqueda para hacer funcionar el bot");
-            return;
-        }
-
-        final GuildVoiceState selfVoiceState = msg.getGuild().getSelfMember().getVoiceState();
-        final GuildVoiceState memberVoiceState = msg.getMember().getVoiceState();
-
-        if (!selfVoiceState.inAudioChannel() && !memberVoiceState.inAudioChannel()) {
-        	Client.sendErrorMessage(msg.getChannel(), "Tienes que estar en un canal de voz para que el bot funcione");
-            return;
-        }else if (!selfVoiceState.inAudioChannel() && memberVoiceState.inAudioChannel()) {
-        	msg.getGuild().getAudioManager().openAudioConnection(memberVoiceState.getChannel());
-        }else if (!memberVoiceState.inAudioChannel() ||selfVoiceState.getChannel().getIdLong() != memberVoiceState.getChannel().getIdLong()) {
-        	Client.sendErrorMessage(msg.getChannel(), "No estamos en el mismo canal, por favor cambiate para usarme");
-        	return;
-        }
-
-        String link = String.join(" ", subArray(msg.getMessage().getContentDisplay().split(" "), 1, msg.getMessage().getContentDisplay().split(" ").length));
-
-        if (!isUrl(link)) {
-            link = "ytsearch:" + link;
-        }
-
-        PlayerManager.getInstance().loadAndPlay(channel, link, false);
-		
-	}
 	@Override
 	public void execute0(SlashCommandInteractionEvent event) {
         if (event.getOption("term") == null || event.getOption("term").getAsString().equals("")) {

@@ -10,19 +10,26 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import botinternals.Client;
 import interfaces.NoParamCommand;
 import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class QueueCommand implements NoParamCommand{
-	MessageEmbed reply;
+
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
-        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(g).scheduler.queue;
+	public String getName() {
+		return "Queue (q / list)";
+	}
+
+	@Override
+	public String getHelp() {
+		return "Muestra la lista de las primeras 20 canciones en la cola";
+	}
+
+	@Override
+	public void execute(SlashCommandInteractionEvent event) {
+		BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue;
 
         if (queue.isEmpty()) {
-            reply = Client.getInfoMessage("Canciones en cola", "Actualmente no hay canciones en cola");
+            Client.sendInfoMessage(event, "Canciones en cola", "Actualmente no hay canciones en cola");
         }else {
 	        int trackCount = Math.min(queue.size(), 20);
 	        List<AudioTrack> trackList = new ArrayList<>(queue);
@@ -37,30 +44,9 @@ public class QueueCommand implements NoParamCommand{
 	            songs+="Y mas...";
 	        }
 	
-	        reply = Client.getInfoMessage("Canciones en cola", songs);
+	        Client.sendInfoMessage(event, "Canciones en cola", songs);
         }
-        if(!slash)mc.sendMessageEmbeds(reply);
 		
-	}
-
-	@Override
-	public String getName() {
-		return "Queue (q / list)";
-	}
-
-	@Override
-	public String getHelp() {
-		return "Muestra la lista de las primeras 20 canciones en la cola";
-	}
-
-	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
-		return new Reply(reply);
-	}
-
-	@Override
-	public boolean replyFirst() {
-		return false;
 	}
 
 }

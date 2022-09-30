@@ -6,27 +6,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import botinternals.Client;
 import interfaces.NoParamCommand;
 import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class NowPlayingCommand implements NoParamCommand{
-	MessageEmbed reply;
-	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
-		if (!checks(g,m,mc))return;
-        AudioTrack track = PlayerManager.getInstance().getMusicManager(g).audioPlayer.getPlayingTrack();
-        if (track == null) {
-        	reply= Client.getInfoMessage("Now playing", "No hay nada reproduciondose ahora mismo");
-        }else {
-        	AudioTrackInfo info = track.getInfo();
-        	reply = Client.getInfoMessage("Now playing", info.title +" - "+info.author+ " ("+info.uri+")",formatTime(info.length));
-        }
-        if(!slash)
-        	mc.sendMessageEmbeds(reply).queue();
-	}
-	
 
 	@Override
 	public String getName() {
@@ -38,16 +20,16 @@ public class NowPlayingCommand implements NoParamCommand{
 		return "Indica lo que se está escuchando en el momento";
 	}
 
-
 	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
-		return new Reply(reply);
-	}
-
-
-	@Override
-	public boolean replyFirst() {
-		return false;
+	public void execute(SlashCommandInteractionEvent event) {
+		if (!checks(event.getGuild(),event.getMember(),event.getChannel()))return;
+        AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
+        if (track == null) {
+        	Client.sendInfoMessage(event, "Now playing", "No hay nada reproduciondose ahora mismo");
+        }else {
+        	AudioTrackInfo info = track.getInfo();
+        	Client.sendInfoMessage(event, "Now playing", info.title +" - "+info.author+ " ("+info.uri+")",formatTime(info.length));
+        }
 	}
 
 }

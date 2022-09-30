@@ -4,23 +4,9 @@ import botinternals.Client;
 import interfaces.NoParamCommand;
 import lavaplayer.PlayerManager;
 import lavaplayer.TrackScheduler;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class LeaveCommand implements NoParamCommand{
-	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
-		if(!checks(g,m,mc))return;
-		g.getAudioManager().closeAudioConnection();
-		TrackScheduler ts= PlayerManager.getInstance().getMusicManager(g).scheduler;
-		ts.queue.clear();
-		ts.nextTrack();
-		Client.sendInfoMessage(mc, "Desconectado", "El bot ha sido desconectado manualmente del actual canal");
-		
-	}
-	
-
 	@Override
 	public String getName() {
 		return "Leave (l / disconnect / d)";
@@ -33,14 +19,13 @@ public class LeaveCommand implements NoParamCommand{
 
 
 	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
-		return new Reply(Client.getInfoMessage("Desconectando", "Intentandod desconectarse de "+g.getAudioManager().getConnectedChannel()==null?"null":g.getAudioManager().getConnectedChannel().getName()));
-	}
-
-
-	@Override
-	public boolean replyFirst() {
-		// TODO Auto-generated method stub
-		return false;
+	public void execute(SlashCommandInteractionEvent event) {
+		if(!checks(event.getGuild(),event.getMember(),event.getChannel()))return;
+		event.getGuild().getAudioManager().closeAudioConnection();
+		TrackScheduler ts= PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler;
+		ts.queue.clear();
+		ts.nextTrack();
+		Client.sendInfoMessage(event, "Desconectado", "El bot ha sido desconectado manualmente del actual canal");
+		
 	}
 }

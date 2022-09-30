@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import commands.queue.PartyCommand;
-import containers.Aliases;
 import containers.Commands;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
@@ -19,34 +18,14 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.user.UserActivityStartEvent;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventHandler extends ListenerAdapter {
 	public final static HashMap<String, MenuManager> selectionMenu = new HashMap<>();
 	@Override
 	public void onMessageReceived(@Nonnull MessageReceivedEvent mre) {
-		if(!mre.isFromGuild())return;
-		if(contains(mre.getMessage().getMentionedUsers(),Client.jda.getSelfUser())) {
-			mre.getChannel().sendMessage("Estoy activo y mi prefijo es: "+Client.prefix).queue();
-		}else if (mre.getMessage().getContentDisplay().startsWith(Client.prefix)){
-			String command0 = mre.getMessage().getContentDisplay().split(" ")[0].toLowerCase().replaceFirst(Client.prefix, "");
-			final String command;
-			if (Aliases.aliasMap.containsKey(command0))command = Aliases.aliasMap.get(command0);
-			else command = command0;
-			if(Commands.commandMap.containsKey(command)) {
-				Thread startThread = new Thread() {
-					public void run() {
-						try {
-						Commands.commandMap.get(command).execute(mre);
-						}catch(InsufficientPermissionException e) {
-							Client.sendErrorMessage(mre.getChannel(), "Imposible ejecutar el comando sin el permiso "+e.getPermission().toString());
-						}
-					}
-				};
-				startThread.start();
-			}
-		}
+		if(contains(mre.getMessage().getMentions().getUsers(),Client.jda.getSelfUser()))
+			Client.sendInfoMessage(mre.getChannel(), "Hola!", "Para mejorar la privacidad del bot, ya no acepta comandos de texto, por favor, escribe / para ver los comandos", "Si no te aparecen, vuelve a invitar al bot (No hace falta quitarlo)");
 	}
 	@Override
 	public void onSelectMenuInteraction(SelectMenuInteractionEvent sme) {

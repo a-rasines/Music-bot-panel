@@ -5,27 +5,11 @@ import java.util.HashMap;
 import botinternals.Client;
 import interfaces.Command;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class PartyCommand implements Command{
 	public static HashMap<Long, Long> stalkerMap = new HashMap<>();
-	@Override
-	public void execute(MessageReceivedEvent msg) {
-		if(msg.getGuild().getAudioManager().getConnectedChannel() == null && msg.getMember().getVoiceState().inAudioChannel())
-			msg.getGuild().getAudioManager().openAudioConnection(msg.getMember().getVoiceState().getChannel());
-		else if(!checks(msg.getMessage()))return;
-		if(!stalkerMap.containsKey(msg.getGuild().getIdLong())) {
-			if(msg.getMessage().getMentionedMembers().size() != 1) {
-				Client.sendErrorMessage(msg.getChannel(), "La cantidad de usuarios stalkeados debe ser estrictamente 1");
-			}else {
-				stalkerMap.put(msg.getGuild().getIdLong(), msg.getMessage().getMentionedMembers().get(0).getIdLong());
-			}
-		}else {
-			Client.sendErrorMessage(msg.getChannel(), "El bot ya está stalkeando a un miembro");
-		}
-	}
 
 	@Override
 	public void execute(SlashCommandInteractionEvent event) {

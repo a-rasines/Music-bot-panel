@@ -17,7 +17,7 @@ import botinternals.Client;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.awt.Color;
@@ -252,7 +252,7 @@ public class PlayerManager {
         		play = Client.spotify.getPlaylist(id).build().execute();
         		name = play.getName();
 			} catch (ParseException | SpotifyWebApiException | IOException e1) {
-				// TODO Auto-generated catch block
+				Client.sendErrorMessage(channel, "An unhandled error has occurred "+e1.getMessage());
 				e1.printStackTrace();
 			}
         	Paging<PlaylistTrack> pl = new Paging.Builder<PlaylistTrack>().build();

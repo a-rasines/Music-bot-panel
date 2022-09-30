@@ -2,9 +2,7 @@ package commands.queue;
 
 import botinternals.Client;
 import interfaces.NoParamCommand;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class StopPartyCommand implements NoParamCommand{
 
@@ -19,19 +17,9 @@ public class StopPartyCommand implements NoParamCommand{
 	}
 
 	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
-		PartyCommand.stalkerMap.remove(g.getIdLong());
-	}
-
-	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
-		return new Reply(Client.getInfoMessage("Exito", "El tracker ha sido eliminado satisfactoriamente"));
-	}
-
-	@Override
-	public boolean replyFirst() {
-		// TODO Auto-generated method stub
-		return false;
+	public void execute(SlashCommandInteractionEvent event) {
+		PartyCommand.stalkerMap.remove(event.getGuild().getIdLong());
+		Client.sendInfoMessage(event, "Party detenida", "La party ya no está activa");
 	}
 
 }

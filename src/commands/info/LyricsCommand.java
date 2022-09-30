@@ -6,21 +6,11 @@ import botinternals.Client;
 import interfaces.NoParamCommand;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class LyricsCommand implements NoParamCommand{
 	AudioTrack track;
 	String lyrics;
-	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
-		GuildMusicManager gmm = PlayerManager.getInstance().getMusicManager(g);
-		track = gmm.audioPlayer.getPlayingTrack(); 
-		lyrics = Client.genius.search(track.getInfo().title).get(0).getText();
-		if(!slash)
-			Client.sendInfoMessage(mc, "Letra de "+track.getInfo().title, lyrics);
-	}
 
 	@Override
 	public String getName() {
@@ -33,12 +23,11 @@ public class LyricsCommand implements NoParamCommand{
 	}
 
 	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
-		return new Reply(Client.getInfoMessage("Letra de "+track.getInfo().title, lyrics));
-	}
-	@Override
-	public boolean replyFirst() {
-		return false;
+	public void execute(SlashCommandInteractionEvent event) {
+		GuildMusicManager gmm = PlayerManager.getInstance().getMusicManager(event.getGuild());
+		track = gmm.audioPlayer.getPlayingTrack(); 
+		lyrics = Client.genius.search(track.getInfo().title).get(0).getText();
+		Client.sendInfoMessage(event, "Letra de "+track.getInfo().title, lyrics);
 	}
 
 }

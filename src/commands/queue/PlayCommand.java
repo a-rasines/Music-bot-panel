@@ -3,36 +3,12 @@ package commands.queue;
 import botinternals.Client;
 import interfaces.Command;
 import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class PlayCommand implements Command{
-	@Override
-	public void execute(MessageReceivedEvent event) {
-		final Message msg = event.getMessage();
-		final TextChannel channel = msg.getTextChannel();
-		
-        if (msg.getContentDisplay().split(" ").length == 1) {
-        	if (msg.getAttachments().size() == 1 && (msg.getAttachments().get(0).getContentType().equals("audio/mpeg"))||msg.getAttachments().get(0).getContentType().equals("video/mp4"))
-        		PlayerManager.getInstance().loadAndPlay(channel, msg.getAttachments().get(0).getUrl(), true);
-        	Client.sendErrorMessage(msg.getChannel(), "Hace falta un link o termino de busqueda para hacer funcionar el bot");
-            return;
-        }
-        if (!msg.getGuild().getSelfMember().getVoiceState().inAudioChannel())msg.getGuild().getAudioManager().openAudioConnection(msg.getMember().getVoiceState().getChannel());
-	    else if (!checks(msg))return;
-        String link = String.join(" ", subArray(msg.getContentDisplay().split(" "), 1, msg.getContentDisplay().split(" ").length));
-
-        if (!isUrl(link)) {
-            link = "ytsearch:" + link;
-        }
-
-        PlayerManager.getInstance().loadAndPlay(channel, link, true);
-		
-	}
+	
 	@Override
 	public void execute(SlashCommandInteractionEvent event) {
 		if(PartyCommand.stalkerMap.containsKey(event.getGuild().getIdLong())) {

@@ -2,18 +2,9 @@ package commands.info;
 
 import botinternals.Client;
 import interfaces.NoParamCommand;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class PingCommand implements NoParamCommand{
-
-	@Override
-	public void execute(Guild g, MessageChannel mc, Member m, boolean slash) {
-		if(!slash)
-		Client.sendInfoMessage(mc,"Ping", "El ping del bot es: "+String.valueOf(Client.jda.getGatewayPing())+"ms");
-		
-	}
 
 	@Override
 	public String getName() {
@@ -26,12 +17,8 @@ public class PingCommand implements NoParamCommand{
 	}
 
 	@Override
-	public Reply reply(Guild g, MessageChannel mc, Member m) {
-		return new Reply(Client.getInfoMessage("Ping", "El ping del bot es: "+String.valueOf(Client.jda.getGatewayPing())+"ms"));
-	}
-
-	@Override
-	public boolean replyFirst() {
-		return true;
+	public void execute(SlashCommandInteractionEvent event) {
+		Client.sendInfoMessage(event,"Ping", "El ping del bot es: "+String.valueOf(Client.jda.getGatewayPing())+"ms");
+		
 	}	
 }
