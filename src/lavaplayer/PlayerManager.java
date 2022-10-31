@@ -202,7 +202,11 @@ public class PlayerManager {
         				.setColor(new Color(101020))
         				.setFooter(formatTime(track.getInfo().length)+"/// Posición en la lista:" + String.valueOf(pos))
         				.build();
-        		event.replyEmbeds(me).queue();
+                if(!event.isAcknowledged())
+                	event.replyEmbeds(me).queue();
+                else {
+                	event.getHook().editOriginalEmbeds(me).setComponents(new ArrayList<>()).setContent("").queue();
+                }
             }
 
             @Override

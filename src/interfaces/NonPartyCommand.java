@@ -10,6 +10,8 @@ public interface NonPartyCommand extends Command{
 		if(PartyCommand.stalkerMap.containsKey(event.getGuild().getIdLong())) {
 			event.replyEmbeds(Client.getErrorMessage("El modo party esta activado. Usa __stopparty__ para poder usar este comando."));
 			return;
+		}else {
+			execute0(event);
 		}
 	}
 	public void execute0(SlashCommandInteractionEvent event);

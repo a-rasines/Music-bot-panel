@@ -47,7 +47,7 @@ public class EventHandler extends ListenerAdapter {
 		Thread th = new Thread(){
 			@Override
 			public void run() {
-			Commands.commandMap.get(sce.getCommandPath()).execute(sce);
+				Commands.commandMap.get(sce.getCommandPath()).execute(sce);
 			}
 		};
 		th.start();

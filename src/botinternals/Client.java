@@ -41,7 +41,7 @@ public class Client {
         authTread.start();
         jda = data.generate();
         if(jda == null)return;
-		genius = new GLA(BotData.geniusId, BotData.geniusSecret);
+		genius = new GLA();
 		Commands.loadCommands();
 		Aliases.loadAliases();
 		jda.getPresence().setActivity(Activity.listening("la música que youtube intenta monetizar"));

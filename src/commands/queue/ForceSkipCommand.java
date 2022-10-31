@@ -31,7 +31,8 @@ public class ForceSkipCommand implements NonPartyNoParamCommand{
             Client.sendErrorMessage(event, "No hay canciones reproduciendose");
             return;
         }
-        Client.sendInfoMessage(event, "Saltando", "Se ha saltado "+ audioPlayer.getPlayingTrack().getInfo().title);
+        if(!event.isAcknowledged())
+        	Client.sendInfoMessage(event, "Saltando", "Se ha saltado "+ audioPlayer.getPlayingTrack().getInfo().title);
         musicManager.scheduler.nextTrack();
 		
 	}

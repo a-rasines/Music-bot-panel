@@ -18,9 +18,10 @@ public class SearchCommand implements NonPartyCommand{
 	@Override
 	public void execute0(SlashCommandInteractionEvent event) {
 		if (event.getOption("term")==null || event.getOption("term").getAsString().equals("")) {
-        	event.replyEmbeds(Client.getErrorMessage("Hace falta un link o termino de busqueda para hacer funcionar el bot")).queue();;
+        	event.replyEmbeds(Client.getErrorMessage("Hace falta un link o termino de busqueda para hacer funcionar el bot")).queue();
             return;
-        }		        final GuildVoiceState selfVoiceState = event.getGuild().getSelfMember().getVoiceState();
+        }		        
+		final GuildVoiceState selfVoiceState = event.getGuild().getSelfMember().getVoiceState();
         final GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
         if (!selfVoiceState.inAudioChannel() && memberVoiceState.inAudioChannel()) 
         	event.getGuild().getAudioManager().openAudioConnection(memberVoiceState.getChannel());
@@ -45,8 +46,7 @@ public class SearchCommand implements NonPartyCommand{
 			AudioTrackInfo info = playlist.get(i).getInfo();
 			desc += i.toString()+". "+info.title+" - "+info.author+"\n";
 		}
-		event.reply("Seleccione en el menu cual se reproducirá").queue();
-		event.getChannel().sendMessageEmbeds(Client.getInfoMessage("Resultados", desc)).setActionRow(menu.build()).queue();
+		event.replyEmbeds(Client.getInfoMessage("Resultados", desc)).setContent("Seleccione el video a reproducir:").setActionRow(menu.build()).queue();
 		
 		
 	}
