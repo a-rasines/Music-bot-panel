@@ -4,9 +4,10 @@ import java.util.List;
 
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 public class MenuManager {
-	private SelectMenu.Builder menu;
+	private StringSelectMenu.Builder menu;
 	private String id;
 	private MenuAction mt;
 	private List<SelectOption> options;
@@ -14,7 +15,7 @@ public class MenuManager {
 	public MenuManager(String id, MenuAction mt) {
 		this.mt = mt;
 		this.id = id;
-		menu = SelectMenu.create(id);
+		menu = StringSelectMenu.create(id);
 		EventHandler.selectionMenu.put(id, this);
 	}
 	

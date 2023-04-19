@@ -4,8 +4,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import commands.queue.PartyCommand;
 import containers.Commands;
 import lavaplayer.GuildMusicManager;
@@ -13,9 +11,9 @@ import lavaplayer.PlayerManager;
 import lavaplayer.TrackScheduler;
 import net.dv8tion.jda.api.entities.RichPresence;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.user.UserActivityStartEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
@@ -24,12 +22,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class EventHandler extends ListenerAdapter {
 	public final static HashMap<String, MenuManager> selectionMenu = new HashMap<>();
 	@Override
-	public void onMessageReceived(@Nonnull MessageReceivedEvent mre) {
+	public void onMessageReceived( MessageReceivedEvent mre) {
 		if(contains(mre.getMessage().getMentions().getUsers(),Client.jda.getSelfUser()))
 			Client.sendInfoMessage(mre.getChannel(), "Hola!", "Para mejorar la privacidad del bot, ya no acepta comandos de texto, por favor, escribe / para ver los comandos", "Si no te aparecen, vuelve a invitar al bot (No hace falta quitarlo)");
 	}
 	@Override
-	public void onSelectMenuInteraction(SelectMenuInteractionEvent sme) {
+	public void onStringSelectInteraction(StringSelectInteractionEvent sme) {
 		if (selectionMenu.containsKey(sme.getComponentId())) {
 			sme.deferEdit().queue();
 			MenuManager mm = selectionMenu.get(sme.getComponentId());
@@ -44,12 +42,12 @@ public class EventHandler extends ListenerAdapter {
 	}
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent sce) {
-		if (!Commands.commandMap.containsKey(sce.getCommandPath()))return;
+		if (!Commands.commandMap.containsKey(sce.getFullCommandName()))return;
 		Thread th = new Thread(){
 			@Override
 			public void run() {
 				try {
-					Commands.commandMap.get(sce.getCommandPath()).execute(sce);
+					Commands.commandMap.get(sce.getFullCommandName()).execute(sce);
 				}catch (InsufficientPermissionException e) {
 					Client.sendErrorMessage(sce, "Not enough permissions: "+e.getPermission().toString());
 				}
@@ -58,7 +56,8 @@ public class EventHandler extends ListenerAdapter {
 		th.start();
 	}
 	@Override
-	public void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
+	public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {
+		if(event.getChannelJoined() != null) return;
 		if(event.getMember().getIdLong() == Client.jda.getSelfUser().getIdLong()) {
 			TrackScheduler ts = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler;
 			ts.queue.clear();
