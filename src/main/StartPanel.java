@@ -20,7 +20,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import botdata.BotData;
 import botdata.ClientData;
 
 public class StartPanel extends JFrame {
@@ -35,8 +34,8 @@ public class StartPanel extends JFrame {
 		bots.clear();
 		c = 0;
 		try {
-			bots.addAll(Arrays.asList(BotData.defaultBots));
-		}catch(Exception e) {}//Para prevenir fallos por la falta de BotData en el caso el repo de github
+			bots.addAll(Arrays.asList((ClientData[])Class.forName("botdata.BotData").getField("defaultBots").get(null)));
+		}catch(Exception e) {e.printStackTrace();}//Para prevenir fallos por la falta de BotData en el caso el repo de github
 		bots.addAll(loadBots());
 		ClientData[] temp = new ClientData[bots.size()];
 		bots.forEach(v->{
@@ -139,7 +138,7 @@ public class StartPanel extends JFrame {
 		@SuppressWarnings("unchecked")
 		ArrayList<ClientData> save = (ArrayList<ClientData>) bots.clone();
 		try {
-			save.removeAll(Arrays.asList(BotData.defaultBots));
+			save.removeAll(Arrays.asList((ClientData[])Class.forName("botdata.BotData").getField("defaultBots").get(null)));
 		}catch(Exception e) {} //Para prevenir fallos por la falta de BotData en el caso el repo de github
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(SAVEDIR));
