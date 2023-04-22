@@ -18,7 +18,7 @@ public class RemoveCommand implements Command{
 		int arg = (int) event.getOption("position").getAsLong();
 		if (!checks(event))return;
 		event.replyEmbeds(Client.getInfoMessage("Eliminando canción", "Eliminando "+((AudioTrack)musicManager.scheduler.queue.toArray()[arg-1]).getInfo().title)).queue();
-		musicManager.scheduler.removeTrack(arg-1);				
+		musicManager.scheduler.removeTrack(arg-1);
 	}
 
 	@Override

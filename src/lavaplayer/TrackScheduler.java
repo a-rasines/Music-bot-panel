@@ -57,7 +57,7 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
     public void removeTrack(int pos) {
-    	this.queue.remove(this.queue.toArray()[pos-1]);
+    	this.queue.remove(this.queue.toArray()[pos]);
     }
     public void nextTrack() {
     	
