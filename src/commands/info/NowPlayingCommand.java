@@ -28,7 +28,7 @@ public class NowPlayingCommand implements NoParamCommand{
         	Client.sendInfoMessage(event, "Now playing", "No hay nada reproduciondose ahora mismo");
         }else {
         	AudioTrackInfo info = track.getInfo();
-        	Client.sendInfoMessage(event, "Now playing", info.title +" - "+info.author+ " ("+info.uri+")",formatTime(info.length));
+        	Client.sendInfoMessage(event, "Now playing", info.title +" - "+info.author+ " ("+info.uri+")\n" + formatTime(track.getPosition()) + '-'+formatTime(info.length));
         }
 	}
 

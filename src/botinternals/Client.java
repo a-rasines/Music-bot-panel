@@ -44,7 +44,7 @@ public class Client {
 		genius = new GLA();
 		Commands.loadCommands();
 		Aliases.loadAliases();
-		jda.getPresence().setActivity(Activity.listening("la música que youtube intenta monetizar"));
+		jda.getPresence().setActivity(Activity.listening("the beauty of silence"));
 	}
 	public static Message sendInfoMessage(MessageChannel channel, String title, String reason) {
 		return channel.sendMessageEmbeds(getInfoMessage(title, reason)).complete();
